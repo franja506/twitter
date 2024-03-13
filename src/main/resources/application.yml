@@ -1,0 +1,54 @@
+spring:
+
+  cloud:
+    config:
+      enabled: false
+
+  application:
+    name: twitter
+
+  reactor:
+    context-propagation: auto
+
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+
+  codec:
+    max-in-memory-size: 500KB
+    log-request-details: true
+
+  r2dbc:
+    name: example
+    username: user
+    password: password
+    url: r2dbc:mysql://localhost:3306/example
+    pool:
+      enabled: true
+      initial-size: 10
+      max-size: 10
+      min-idle: 0
+
+  data:
+    redis:
+      client-type: lettuce
+      client-name: seed-redis
+      connect-timeout: 5s
+      host: localhost
+      database: 0
+      password: password
+      port: 6379
+      timeout: 5s
+
+  kafka:
+    consumer:
+      auto-offset-reset: earliest
+    bootstrap-servers: localhost:19092
+
+logging:
+  level:
+    org.springframework.cache: TRACE
+    org.springframework.data.r2dbc: TRACE
+    org.springframework.data.r2dbc.connectionfactory: TRACE
+    org.springframework.data.repository: TRACE
+    org.springframework.web.reactive.function.client.ExchangeFunctions: TRACE
+    io.asyncer.r2dbc.mysql.QUERY: DEBUG

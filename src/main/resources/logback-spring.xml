@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <include resource="org/springframework/boot/logging/logback/base.xml"/>
+    <springProperty scope="context" name="springAppName" source="spring.application.name"/>
+
+    <springProfile name="!local">
+
+        <!-- Appender to log to file in a JSON format -->
+        <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+            <destination>${LOGSTASH_URL:-logstash:5000}</destination>
+            <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+                <providers>
+                    <mdc/>
+                    <timestamp>
+                        <timeZone>UTC</timeZone>
+                    </timestamp>
+                    <arguments/>
+                    <tags/>
+                    <stackTrace/>
+                    <message/>
+                    <pattern>
+                        <pattern>
+                            {
+                            "appname": "${springAppName:-}",
+                            "environment": "${ENVIRONMENT:-ENV_NOT_DEFINED}",
+                            "springProfile": "${spring.profiles.active:-}",
+                            "level": "%level",
+                            "thread": "%thread",
+                            "class": "%logger"
+                            }
+                        </pattern>
+                    </pattern>
+                </providers>
+            </encoder>
+        </appender>
+
+        <appender name="ASYNCLOGSTASH" class="ch.qos.logback.classic.AsyncAppender">
+            <appender-ref ref="LOGSTASH"/>
+        </appender>
+
+        <root level="INFO">
+            <appender-ref ref="ASYNCLOGSTASH"/>
+        </root>
+    </springProfile>
+
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
+</configuration>
