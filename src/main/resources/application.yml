@@ -18,7 +18,7 @@ spring:
     log-request-details: true
 
   r2dbc:
-    name: example
+    name: twitter
     username: user
     password: password
     url: r2dbc:mysql://localhost:3306/example
@@ -31,7 +31,7 @@ spring:
   data:
     redis:
       client-type: lettuce
-      client-name: seed-redis
+      client-name: twitter-redis
       connect-timeout: 5s
       host: localhost
       database: 0
@@ -43,6 +43,20 @@ spring:
     consumer:
       auto-offset-reset: earliest
     bootstrap-servers: localhost:19092
+
+event:
+  topic:
+    tweets:
+      created: created.tweet
+    timelines:
+      update: updated.timeline
+      updateFollowers: updated.timelines.follower
+  group:
+    persist:
+      tweets: persist.tweet
+    update:
+      timeline: update.timeline
+      followers-timeline: update.timeline.follower
 
 logging:
   level:

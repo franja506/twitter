@@ -22,5 +22,7 @@ class UserController(
             .awaitSingle()
 
     @PostMapping("/{userId}/follow/{followedId}")
-    fun follow(@PathVariable userId: Long, @PathVariable followedId: Long) = followUserPortIn.execute(userId,followedId)
+    suspend fun follow(@PathVariable userId: Long, @PathVariable followedId: Long): Long =
+        followUserPortIn.execute(userId,followedId)
+            .awaitSingle()
 }

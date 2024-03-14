@@ -1,13 +1,16 @@
 package com.twitter.tweets.application.usecase
 
 import com.twitter.tweets.application.port.`in`.CreateTweetPortIn
+import com.twitter.tweets.application.port.out.CreateTweetPortOut
 import com.twitter.tweets.domain.Tweet
-import kotlinx.coroutines.flow.Flow
 import org.springframework.stereotype.Component
+import reactor.core.publisher.Mono
 
 @Component
-class CreateTweetUseCase: CreateTweetPortIn {
-    override fun execute(tweet: Tweet): Flow<Tweet> {
-        TODO("Not yet implemented")
-    }
+class CreateTweetUseCase(
+    private val createTweetPortOut: CreateTweetPortOut
+): CreateTweetPortIn {
+    override suspend fun execute(tweet: Tweet): Mono<Tweet> =
+        createTweetPortOut.execute(tweet)
+
 }

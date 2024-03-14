@@ -20,8 +20,23 @@ class KafkaConfig {
     fun admin() = KafkaAdmin(mapOf(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG to bootstrapAddress))
 
     @Bean
-    fun topic1() =
-        TopicBuilder.name("thing1")
+    fun createdTweetTopic() =
+        TopicBuilder.name("created.tweet")
+            .partitions(3)
+            .replicas(1)
+            .config(TopicConfig.CLEANUP_POLICY_CONFIG, TopicConfig.CLEANUP_POLICY_DELETE)
+            .build()
+
+    @Bean
+    fun updatedTimelineTopic() =
+        TopicBuilder.name("updated.timeline")
+            .partitions(3)
+            .replicas(1)
+            .config(TopicConfig.CLEANUP_POLICY_CONFIG, TopicConfig.CLEANUP_POLICY_DELETE)
+            .build()
+
+    fun updatedTimelinesFollowerTopic() =
+        TopicBuilder.name("updated.timelines.follower")
             .partitions(3)
             .replicas(1)
             .config(TopicConfig.CLEANUP_POLICY_CONFIG, TopicConfig.CLEANUP_POLICY_DELETE)

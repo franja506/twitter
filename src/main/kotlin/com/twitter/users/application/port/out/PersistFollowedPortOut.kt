@@ -1,6 +1,8 @@
 package com.twitter.users.application.port.out
 
+import reactor.core.publisher.Mono
+
 interface PersistFollowedPortOut {
 
-    fun execute(followerId: Long, followedId: Long)
+    suspend fun follow(followerId: Long, followedId: Long): Mono<Long>
 }
