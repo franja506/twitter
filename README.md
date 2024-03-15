@@ -4,6 +4,9 @@
 ## Description:
 POC to undertanding twitter architecture 
 
+## Architecture
+![](diagrams/architecture.jpg)
+
 ## Index:
 - [Stack](#stack️)
 - [How to Run](#how-to-run)

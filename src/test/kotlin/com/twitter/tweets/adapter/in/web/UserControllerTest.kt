@@ -30,7 +30,7 @@ class UserControllerTest {
     @Test
     fun `should create a user`() {
 
-        val user = User(1, "john_doe")
+        val user = User(1, "john_doe", "john_doe@mail.com")
 
         coEvery { createUserPortIn.execute(user) } returns Mono.just(user)
 

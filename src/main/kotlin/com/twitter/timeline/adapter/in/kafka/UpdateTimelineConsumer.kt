@@ -19,11 +19,11 @@ class UpdateTimelineConsumer(
 ): KafkaMessageConsumer(consumerMessageResolver) {
     @KafkaListener(topics = ["\${event.topic.tweets.created}"], groupId = "\${event.group.update.timeline}")
     @RetryableTopic(retryTopicSuffix = ".propagate-retry", dltTopicSuffix = ".propagate-dlt")
-    suspend fun execute(@Payload message: String, @Header(KafkaHeaders.RECEIVED_TOPIC) topic: String, ack: Acknowledgment) =
-        generateConsumerMessage<Pair<Long, Tweet>>(message, topic)
+    fun execute(@Payload message: String, @Header(KafkaHeaders.RECEIVED_TOPIC) topic: String, ack: Acknowledgment) =
+        generateConsumerMessage<Tweet>(message, topic)
             .consume(ack) {
                 it.message
-                    .let { (_,tweet) ->
+                    .let { tweet ->
                         propagateTimelinePortIn.propagate(tweet)
                             .log { info("tweet $tweet is distributed around his followers") }
 

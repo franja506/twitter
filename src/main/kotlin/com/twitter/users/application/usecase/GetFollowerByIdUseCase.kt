@@ -10,7 +10,7 @@ class GetFollowerByIdUseCase(
     private val retrieveFollower: GetFollowersByIdPortOut
 ): GetFollowersByIdPortIn {
 
-    override suspend fun findById(followedId: Long): Flux<Long> =
+    override fun findById(followedId: Long): Flux<Long> =
         retrieveFollower.getById(followedId)
 
 }

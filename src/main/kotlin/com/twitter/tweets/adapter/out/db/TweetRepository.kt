@@ -13,7 +13,7 @@ class TweetRepository(
 ): PersistTweetPortOut {
 
     private val dbClient = DatabaseClient.create(connectionFactory)
-    override suspend fun persist(tweet: Tweet): Mono<Tweet> =
+    override fun persist(tweet: Tweet): Mono<Tweet> =
         dbClient.sql("insert into tweet (id, user_id, body) values (:id, :user_id, :body)")
             .bind("id", tweet.id!!)
             .bind("user_id", tweet.userId)
@@ -22,4 +22,8 @@ class TweetRepository(
             .rowsUpdated()
             .thenReturn(tweet)
             .onErrorResume { e -> Mono.error(e) }
+
+
+
+
 }
