@@ -46,6 +46,10 @@ dependencies {
     testImplementation("com.ninja-squad:springmockk:4.0.2")
     testImplementation("io.projectreactor:reactor-test")
     testImplementation("org.springframework.kafka:spring-kafka-test")
+
+    // ID_generator
+    implementation("cn.hutool:hutool-core:5.8.7")
+
 }
 
 dependencyManagement {

@@ -1,5 +1,7 @@
 package com.twitter.shared.config
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.twitter.shared.utils.kafka.KafkaObjectMapper
 import org.apache.kafka.clients.admin.AdminClientConfig
 import org.apache.kafka.common.config.TopicConfig
 import org.springframework.beans.factory.annotation.Value
@@ -18,6 +20,9 @@ class KafkaConfig {
 
     @Bean
     fun admin() = KafkaAdmin(mapOf(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG to bootstrapAddress))
+
+    @Bean
+    fun kafkaObjectMapper(objectMapper: ObjectMapper) = KafkaObjectMapper(objectMapper)
 
     @Bean
     fun createdTweetTopic() =

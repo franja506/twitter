@@ -6,6 +6,7 @@ import com.twitter.tweets.domain.Tweet
 import jakarta.validation.Valid
 import kotlinx.coroutines.reactor.awaitSingle
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
@@ -16,7 +17,7 @@ class TweetsController(
 ) {
 
     @PostMapping
-    suspend fun create(@Valid request: CreateTweetRequest): Tweet =
+    suspend fun create(@Valid @RequestBody request: CreateTweetRequest): Tweet =
         request
             .mapToDomain()
             .createTweet()

@@ -1,20 +1,33 @@
 package com.twitter.timeline.adapter.`in`.kafka
 
+import com.twitter.shared.utils.kafka.ConsumerMessageResolver
+import com.twitter.shared.utils.kafka.KafkaMessageConsumer
 import com.twitter.timeline.application.port.`in`.PropagateTimelinePortIn
 import com.twitter.tweets.domain.Tweet
 import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.kafka.annotation.RetryableTopic
 import org.springframework.kafka.support.Acknowledgment
+import org.springframework.kafka.support.KafkaHeaders
+import org.springframework.messaging.handler.annotation.Header
 import org.springframework.messaging.handler.annotation.Payload
 import org.springframework.stereotype.Component
 
 @Component
 class UpdateTimelineConsumer(
-    private val propagateTimelinePortIn: PropagateTimelinePortIn
-) {
-    @KafkaListener(topics = ["\${event.topic.timelines.update}"], groupId = "\${event.group.update.timeline}")
+    private val propagateTimelinePortIn: PropagateTimelinePortIn,
+    consumerMessageResolver: ConsumerMessageResolver
+): KafkaMessageConsumer(consumerMessageResolver) {
+    @KafkaListener(topics = ["\${event.topic.tweets.created}"], groupId = "\${event.group.update.timeline}")
     @RetryableTopic(retryTopicSuffix = ".propagate-retry", dltTopicSuffix = ".propagate-dlt")
-    suspend fun execute(@Payload tweet: Tweet, ack: Acknowledgment) =
-         propagateTimelinePortIn.propagate(tweet)
+    suspend fun execute(@Payload message: String, @Header(KafkaHeaders.RECEIVED_TOPIC) topic: String, ack: Acknowledgment) =
+        generateConsumerMessage<Pair<Long, Tweet>>(message, topic)
+            .consume(ack) {
+                it.message
+                    .let { (_,tweet) ->
+                        propagateTimelinePortIn.propagate(tweet)
+                            .log { info("tweet $tweet is distributed around his followers") }
+
+                    }
+            }
 
 }

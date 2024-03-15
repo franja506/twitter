@@ -4,5 +4,5 @@ import reactor.core.publisher.Flux
 
 interface GetFollowersByIdPortIn {
 
-    suspend fun findById(followedId: Long): Flux<Long>
+    fun findById(followedId: Long): Flux<Long>
 }

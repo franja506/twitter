@@ -2,6 +2,7 @@ package com.twitter.tweets.adapter.out.kafka
 
 import com.twitter.shared.error.exceptions.QueueProducerNotWrittenException
 import com.twitter.shared.logging.CompanionLogger
+import com.twitter.shared.utils.kafka.KafkaObjectMapper
 import com.twitter.tweets.application.port.out.CreateTweetPortOut
 import com.twitter.tweets.domain.Tweet
 import org.springframework.beans.factory.annotation.Value
@@ -11,12 +12,13 @@ import reactor.core.publisher.Mono
 
 @Component
 class CreateTweetProducer(
-    private val kafkaTemplate: KafkaTemplate<String, Tweet>,
+    private val kafkaTemplate: KafkaTemplate<String, String>,
     @Value("\${event.topic.tweets.created}")
     private val topic: String,
+    private val objectMapper: KafkaObjectMapper
 ) : CreateTweetPortOut {
     override suspend fun execute(tweet: Tweet): Mono<Tweet> =
-        kafkaTemplate.send(topic, tweet.id.toString(), tweet)
+        kafkaTemplate.send(topic, tweet.id.toString(), tweet.asMessage())
             .log { info("created tweet event produced: {}", tweet) }
             .let { Mono.just(tweet) }
             .onErrorResume { e ->
@@ -26,6 +28,8 @@ class CreateTweetProducer(
                     )
                 )
             }
+
+    private fun Tweet.asMessage() = objectMapper.serialize(this)
 
     companion object: CompanionLogger()
 }

@@ -6,5 +6,5 @@ import reactor.core.publisher.Mono
 
 interface UpdateFollowerTimelinePortOut {
 
-    fun updateFollower(pair: Pair<Long, Tweet>): Mono<Pair<Long, Tweet>>
+    fun updateFollower(pair: Pair<Long, Tweet>): Pair<Long, Tweet>
 }

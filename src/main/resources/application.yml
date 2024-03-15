@@ -40,8 +40,19 @@ spring:
       timeout: 5s
 
   kafka:
+    listener:
+      ack-mode: "manual_immediate"
+      missing-topics-fatal: false
     consumer:
+      enable-auto-commit: false
       auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
     bootstrap-servers: localhost:19092
 
 event:

@@ -11,7 +11,7 @@ class PropagateTimelineUseCase(
     private val getFollowersById: GetFollowersByIdPortIn,
     private val updateFollowerTimeline: UpdateFollowerTimelinePortOut,
 ) : PropagateTimelinePortIn {
-    override suspend fun propagate(tweet: Tweet) {
+    override fun propagate(tweet: Tweet) {
 
         val followers = getFollowersById.findById(tweet.userId)
 

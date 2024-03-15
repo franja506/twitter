@@ -4,5 +4,5 @@ import com.twitter.tweets.domain.Tweet
 
 interface UpdateFollowerTimelinePortIn {
 
-    suspend fun update(pair: Pair<Long, Tweet>): Pair<Long, Tweet>
+    fun update(pair: Pair<Long, Tweet>): Pair<Long, Tweet>
 }

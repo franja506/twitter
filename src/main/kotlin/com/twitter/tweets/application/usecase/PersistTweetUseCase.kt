@@ -10,7 +10,7 @@ import reactor.core.publisher.Mono
 class PersistTweetUseCase(
     private val persistTweetPortOut: PersistTweetPortOut
 ): PersistTweetPortIn {
-    override suspend fun persist(tweet: Tweet): Mono<Tweet> =
+    override fun persist(tweet: Tweet): Mono<Tweet> =
         persistTweetPortOut.persist(tweet)
 
 }

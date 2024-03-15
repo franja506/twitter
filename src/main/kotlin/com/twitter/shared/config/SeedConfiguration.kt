@@ -58,14 +58,6 @@ class SeedConfiguration(
             )
     }
 
-
-//    @PostConstruct
-//	fun init() {
-//		ContextRegistry.getInstance().registerThreadLocalAccessor(ObservationAwareSpanThreadLocalAccessor(tracer));
-//		ObservationThreadLocalAccessor.getInstance().observationRegistry = observationRegistry
-//		Metrics.observationRegistry(observationRegistry)
-//	}
-
     @Bean
     fun coroutineWebFilter(): WebFilter {
         return object : CoWebFilter() {
