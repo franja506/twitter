@@ -21,7 +21,7 @@ class PersistTweetConsumer(
 ): KafkaMessageConsumer(consumerMessageResolver) {
     @KafkaListener(topics = ["\${event.topic.tweets.created}"], groupId = "\${event.group.persist.tweets}")
     @RetryableTopic(retryTopicSuffix = ".persist-retry", dltTopicSuffix = ".persist-dlt")
-    suspend fun execute(@Payload message: String, @Header(KafkaHeaders.RECEIVED_TOPIC) topic: String, ack: Acknowledgment) =
+    fun execute(@Payload message: String, @Header(KafkaHeaders.RECEIVED_TOPIC) topic: String, ack: Acknowledgment) =
         generateConsumerMessage<Tweet>(message, topic)
             .consume(ack) {
                 it.message

@@ -21,7 +21,7 @@ class UpdateFollowerTimelineConsumer(
 
     @KafkaListener(topics = ["\${event.topic.timelines.updateFollowers}"], groupId = "\${event.group.update.followers-timeline}")
     @RetryableTopic(retryTopicSuffix = ".retry", dltTopicSuffix = ".dlt")
-    suspend fun execute(@Payload message: String, @Header(KafkaHeaders.RECEIVED_TOPIC) topic: String, ack: Acknowledgment) =
+    fun execute(@Payload message: String, @Header(KafkaHeaders.RECEIVED_TOPIC) topic: String, ack: Acknowledgment) =
         generateConsumerMessage<Pair<Long, Tweet>>(message, topic)
             .consume(ack) {
                 it.message

@@ -5,5 +5,5 @@ import reactor.core.publisher.Mono
 
 interface PersistTweetPortOut {
 
-    suspend fun persist(tweet: Tweet): Mono<Tweet>
+    fun persist(tweet: Tweet): Mono<Tweet>
 }
