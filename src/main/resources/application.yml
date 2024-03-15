@@ -1,0 +1,79 @@
+spring:
+
+  cloud:
+    config:
+      enabled: false
+
+  application:
+    name: twitter
+
+  reactor:
+    context-propagation: auto
+
+  jackson:
+    property-naming-strategy: SNAKE_CASE
+
+  codec:
+    max-in-memory-size: 500KB
+    log-request-details: true
+
+  r2dbc:
+    name: twitter
+    username: user
+    password: password
+    url: r2dbc:mysql://localhost:3306/example
+    pool:
+      enabled: true
+      initial-size: 10
+      max-size: 10
+      min-idle: 0
+
+  data:
+    redis:
+      client-type: lettuce
+      client-name: twitter-redis
+      connect-timeout: 5s
+      host: localhost
+      database: 0
+      password: password
+      port: 6379
+      timeout: 5s
+
+  kafka:
+    listener:
+      ack-mode: "manual_immediate"
+      missing-topics-fatal: false
+    consumer:
+      enable-auto-commit: false
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      properties:
+        spring.json.trusted.packages: "*"
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    bootstrap-servers: localhost:19092
+
+event:
+  topic:
+    tweets:
+      created: created.tweet
+    timelines:
+      update: updated.timeline
+      updateFollowers: updated.timelines.follower
+  group:
+    persist:
+      tweets: persist.tweet
+    update:
+      timeline: update.timeline
+      followers-timeline: update.timeline.follower
+
+logging:
+  level:
+    org.springframework.cache: TRACE
+    org.springframework.data.r2dbc: TRACE
+    org.springframework.data.r2dbc.connectionfactory: TRACE
+    org.springframework.data.repository: TRACE
+    org.springframework.web.reactive.function.client.ExchangeFunctions: TRACE
+    io.asyncer.r2dbc.mysql.QUERY: DEBUG
